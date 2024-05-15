@@ -1,49 +1,67 @@
-function addTransaction() {
-    var amountInput = document.getElementById("amount").value.trim(); // Leerzeichen entfernen
+let transactions = [];
 
-    // Überprüfen, ob der eingegebene Wert eine gültige Zahl ist
-    if (!(/^\d*\.?\d*$/.test(amountInput))) {
-        alert("Bitte geben Sie einen gültigen Betrag ein.");
-        return;
-    }
+        function addTransaction() {
+            let amountInput = document.getElementById("amount").value.trim(); // Leerzeichen entfernen
+            let description = document.getElementById("description").value.trim();
 
-    var amount = parseFloat(amountInput);
-    var description = document.getElementById("description").value;
-    var transactionList = document.getElementById("transaction-body");
+            // Überprüfen, ob beide Felder leer sind
+            if (amountInput === "" && description === "") {
+                alert("Bitte füllen Sie mindestens eines der Felder aus.");
+                return;
+            }
 
-    var newRow = document.createElement("tr");
-    var newAmountCell = document.createElement("td");
-    var newDescriptionCell = document.createElement("td");
+            // Überprüfen, ob der eingegebene Wert eine gültige Zahl ist
+            if (amountInput !== "" && !(/^\d*\.?\d*$/.test(amountInput))) {
+                alert("Bitte geben Sie einen gültigen Betrag ein.");
+                return;
+            }
 
-    newAmountCell.textContent = amount.toFixed(2); // Hier die Änderung
-    newDescriptionCell.textContent = description;
+            let amount = parseFloat(amountInput);
 
-    newRow.appendChild(newAmountCell);
-    newRow.appendChild(newDescriptionCell);
+            // Wenn es sich um Ausgaben handelt, den Betrag negativ setzen
+            if (description !== "") {
+                amount *= -1;
+            }
 
-    if (amount >= 0) {
-        newRow.className = "table-success";
-    } else {
-        newRow.className = "table-danger";
-    }
+            transactions.push({ amount: amount, description: description });
+            renderTransactions();
+            updateTotal();
 
-    transactionList.appendChild(newRow);
+            // Formular leeren
+            document.getElementById("amount").value = "";
+            document.getElementById("description").value = "";
+        }
 
-    updateTotal();
+        function renderTransactions() {
+            let transactionList = document.getElementById("transaction-body");
+            transactionList.innerHTML = '';
 
-    // Formular leeren
-    document.getElementById("amount").value = "";
-    document.getElementById("description").value = "";
-}
+            transactions.forEach(function(transaction) {
+                let newRow = document.createElement("tr");
+                let newAmountCell = document.createElement("td");
+                let newDescriptionCell = document.createElement("td");
 
-function updateTotal() {
-    var total = 0;
-    var transactionRows = document.querySelectorAll("#transaction-body tr");
+                newAmountCell.textContent = transaction.amount.toFixed(2);
+                newDescriptionCell.textContent = transaction.description;
 
-    transactionRows.forEach(function(row) {
-        var amount = parseFloat(row.cells[0].textContent);
-        total += amount;
-    });
+                newRow.appendChild(newAmountCell);
+                newRow.appendChild(newDescriptionCell);
 
-    document.getElementById("total-amount").textContent = total.toFixed(2);
-}
+                if (transaction.amount >= 0) {
+                    newRow.className = "table-success";
+                } else {
+                    newRow.className = "table-danger";
+                }
+
+                transactionList.appendChild(newRow);
+            });
+        }
+
+        function updateTotal() {
+            let total = 0;
+            transactions.forEach(function(transaction) {
+                total += transaction.amount;
+            });
+
+            document.getElementById("total-amount").textContent = total.toFixed(2);
+        }
