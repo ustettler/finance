@@ -37,7 +37,7 @@ function renderTransactions() {
         const newAmountCell = document.createElement("td");
         const newDescriptionCell = document.createElement("td");
 
-        newAmountCell.textContent = transaction.amount.toFixed(2);
+        newAmountCell.textContent = Math.abs(transaction.amount).toFixed(2);
         newDescriptionCell.textContent = transaction.description;
 
         newRow.appendChild(newAmountCell);
