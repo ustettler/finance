@@ -29,16 +29,17 @@ label, th {
 }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1 class="text-center"><b>F</b>B <b>Finanz</b>Planung</h1>
+        <h1 class="text-center">Finanzplanung</h1>
         <div class="form-group">
             <label for="amount">Betrag:</label>
             <input type="text" class="form-control" id="amount" placeholder="Betrag eingeben">
         </div>
         <div class="form-group">
-            <label for="description">Ausgaben:</label>
-            <input type="text" class="form-control" id="description" placeholder="Ausgaben eingeben">
+            <label for="description">Beschreibung:</label>
+            <input type="text" class="form-control" id="description" placeholder="Beschreibung eingeben">
         </div>
         <button class="btn btn-primary" onclick="addTransaction()">Hinzufügen</button>
         
@@ -46,14 +47,14 @@ label, th {
             <thead>
                 <tr>
                     <th>Betrag</th>
-                    <th>Ausgaben</th>
+                    <th>Beschreibung</th>
                 </tr>
             </thead>
             <tbody id="transaction-body">
             </tbody>
         </table>
 
-        <div class="text-center font-weight-bold" id="total">Gesamtvermögen: <span id="total-amount">0.00</span></div>
+        <div class="text-center font-weight-bold" id="total">Gesamt: <span id="total-amount">0.00</span></div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->

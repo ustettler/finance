@@ -1,55 +1,68 @@
 let transactions = [];
 
-function addTransaction() {
-    const amountInput = document.getElementById("amount").value.trim();
-    const description = document.getElementById("description").value.trim();
+        function addTransaction() {
+            let amountInput = document.getElementById("amount").value.trim(); // Leerzeichen entfernen
+            let description = document.getElementById("description").value.trim();
 
-    if (amountInput === "" && description === "") {
-        alert("Bitte füllen Sie mindestens eines der Felder aus.");
-        return;
-    }
+            // Überprüfen, ob beide Felder leer sind
+            if (amountInput === "" && description === "") {
+                alert("Bitte füllen Sie mindestens eines der Felder aus.");
+                return;
+            }
 
-    if (amountInput !== "" && !(/^\d*\.?\d*$/.test(amountInput))) {
-        alert("Bitte geben Sie einen gültigen Betrag ein.");
-        return;
-    }
+            // Überprüfen, ob der eingegebene Wert eine gültige Zahl ist
+            if (amountInput !== "" && isNaN(amountInput)) {
+                alert("Bitte geben Sie einen gültigen Betrag ein.");
+                return;
+            }
 
-    const amount = amountInput !== "" ? parseFloat(amountInput) : 0;
-    if (description !== "" && amount !== 0) {
-        transactions.push({ amount: -amount, description: description });
-    } else {
-        transactions.push({ amount: amount, description: description });
-    }
+            // Konvertiere den Betrag in eine Zahl, oder setze auf 0 wenn leer
+            let amount = parseFloat(amountInput) || 0;
 
-    renderTransactions();
-    updateTotal();
+            // Wenn es sich um Ausgaben handelt (Beschreibung vorhanden und Betrag positiv), den Betrag negativ setzen
+            if (description !== "" && amount > 0) {
+                amount *= -1;
+            }
 
-    document.getElementById("amount").value = "";
-    document.getElementById("description").value = "";
-}
+            transactions.push({ amount: amount, description: description });
+            renderTransactions();
+            updateTotal();
 
-function renderTransactions() {
-    const transactionList = document.getElementById("transaction-body");
-    transactionList.innerHTML = '';
+            // Formular leeren
+            document.getElementById("amount").value = "";
+            document.getElementById("description").value = "";
+        }
 
-    transactions.forEach(function(transaction) {
-        const newRow = document.createElement("tr");
-        const newAmountCell = document.createElement("td");
-        const newDescriptionCell = document.createElement("td");
+        function renderTransactions() {
+            let transactionList = document.getElementById("transaction-body");
+            transactionList.innerHTML = '';
 
-        newAmountCell.textContent = Math.abs(transaction.amount).toFixed(2);
-        newDescriptionCell.textContent = transaction.description;
+            transactions.forEach(function(transaction) {
+                let newRow = document.createElement("tr");
+                let newAmountCell = document.createElement("td");
+                let newDescriptionCell = document.createElement("td");
 
-        newRow.appendChild(newAmountCell);
-        newRow.appendChild(newDescriptionCell);
+                newAmountCell.textContent = transaction.amount.toFixed(2);
+                newDescriptionCell.textContent = transaction.description;
 
-        newRow.className = transaction.amount >= 0 ? "table-success" : "table-danger";
+                newRow.appendChild(newAmountCell);
+                newRow.appendChild(newDescriptionCell);
 
-        transactionList.appendChild(newRow);
-    });
-}
+                if (transaction.amount >= 0) {
+                    newRow.className = "table-success";
+                } else {
+                    newRow.className = "table-danger";
+                }
 
-function updateTotal() {
-    const total = transactions.reduce((acc, cur) => acc + cur.amount, 0);
-    document.getElementById("total-amount").textContent = total.toFixed(2);
-}
+                transactionList.appendChild(newRow);
+            });
+        }
+
+        function updateTotal() {
+            let total = 0;
+            transactions.forEach(function(transaction) {
+                total += transaction.amount;
+            });
+
+            document.getElementById("total-amount").textContent = total.toFixed(2);
+        }
