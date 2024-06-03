@@ -42,11 +42,11 @@ label, th {
     <div class="container">
         <h1 class="text-center">Finanzplanung</h1>
         <div class="form-group">
-            <label for="amount">+ Betrag:</label>
+            <label for="amount">Einnahmen:</label>
             <input type="text" class="form-control" id="amount" placeholder="Betrag eingeben">
         </div>
         <div class="form-group">
-            <label for="description">- Betrag</label>
+            <label for="description">Ausgaben: </label>
             <input type="text" class="form-control" id="description" placeholder="Betrag eingeben">
         </div>
         <button class="btn btn-primary" onclick="addTransaction()">Hinzufügen</button>
@@ -54,8 +54,8 @@ label, th {
         <table class="table mt-4">
             <thead>
                 <tr>
-                    <th>+ Betrag</th>
-                    <th>- Betrag</th>
+                    <th>Einnahmen</th>
+                    <th>Ausgaben</th>
                 </tr>
             </thead>
             <tbody id="transaction-body">
